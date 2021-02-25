@@ -7,7 +7,11 @@ const color = {
   transparent: 'rgba(0,0,0,0)',
   white: '#f7f5f0',
   whiteOpacity: 'rgba(247, 245, 240,.6)',
+  bgInputAuth: 'rgba(247, 245, 240,.3)',
   blackOpacity: 'rgba(0,0,0,.1)',
+  fb: '#3b5998',
+  google: '#ea4335',
+  twitter: '#1da1f2',
 };
 
 export {color};

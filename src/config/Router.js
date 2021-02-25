@@ -16,7 +16,12 @@ import Home from '../screens/main/Home';
 import Landing from '../screens/Landing';
 
 const DashboardStack = createStackNavigator();
-const AuthScreen = () => {
+const AuthScreen = (gesture_conf) => {
+  const configOptions = {
+    header: (props) => <HeaderAuth {...props} />,
+    cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+    ...gesture_conf,
+  };
   return (
     <DashboardStack.Navigator headerMode="screen">
       <DashboardStack.Screen
@@ -27,28 +32,12 @@ const AuthScreen = () => {
       <DashboardStack.Screen
         name="SignIn"
         component={SignIn}
-        options={{
-          header: (props) => <HeaderAuth {...props} />,
-          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-          gestureEnabled: true,
-          gestureDirection: 'vertical',
-          gestureResponseDistance: {
-            vertical: scale(200),
-          },
-        }}
+        options={configOptions}
       />
       <DashboardStack.Screen
         name="SignUp"
         component={SignUp}
-        options={{
-          header: (props) => <HeaderAuth {...props} />,
-          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-          gestureEnabled: true,
-          gestureDirection: 'vertical',
-          gestureResponseDistance: {
-            vertical: scale(200),
-          },
-        }}
+        options={configOptions}
       />
     </DashboardStack.Navigator>
   );
@@ -65,16 +54,24 @@ const MainScreen = () => {
 const App = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState();
+  const gestureConfig = {
+    gestureEnabled: true,
+    gestureDirection: 'vertical',
+    gestureResponseDistance: {
+      vertical: scale(200),
+    },
+  };
 
   const _authCredentials = (_user) => {
-    console.log('_user', _user);
+    // console.log('_user', _user);
+    AuthScreen(gestureConfig);
     setUser(_user);
     setLoading(false);
   };
 
   useEffect(() => {
     const subscribe = auth().onAuthStateChanged(_authCredentials);
-    return subscribe;
+    return () => subscribe();
   }, []);
 
   return loading ? (
@@ -86,7 +83,7 @@ const App = () => {
     />
   ) : (
     <NavigationContainer>
-      {user === null ? <AuthScreen /> : <MainScreen />}
+      {!user ? <AuthScreen /> : <MainScreen />}
     </NavigationContainer>
   );
 };
