@@ -35,23 +35,4 @@ const font = (_type) => {
   }
 };
 
-const indicator = StyleSheet.create({
-  container: {flex: 1, justifyContent: 'center'},
-});
-
-const signin = StyleSheet.create({
-  container: {padding: 10, flex: 1},
-  btnSignIn: {marginTop: 5},
-  containerFooter: {flexDirection: 'row', alignSelf: 'center'},
-  btnSignUp: {color: color.aqua, fontWeight: 'bold'},
-});
-
-const signup = StyleSheet.create({
-  container: {padding: 10, flex: 1},
-  btnSignUp: {marginTop: 10},
-  containerFooter: {flexDirection: 'column'},
-  containerCaption: {flexDirection: 'row', alignSelf: 'center'},
-  btnSignIn: {color: color.aqua, fontWeight: 'bold'},
-});
-
-export {WIDTH, HEIGHT, scale, font, indicator, signin, signup};
+export {WIDTH, HEIGHT, scale, font};

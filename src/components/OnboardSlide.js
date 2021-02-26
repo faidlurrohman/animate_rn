@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {color} from '../css/Colors';
 import {scale, WIDTH} from '../css/Style';
 
 const OnboardSlide = (props) => {

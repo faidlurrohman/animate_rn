@@ -1,26 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
 import auth from '@react-native-firebase/auth';
-import {ActivityIndicator} from 'react-native-paper';
+import {ActivityIndicator} from 'react-native';
 import {color} from '../css/Colors';
-import {indicator, scale} from '../css/Style';
+import {AuthContext} from './firebase/AuthProvider';
 
-import HeaderAuth from '../helper/HeaderAuth';
+import HeaderAuth from '../components/HeaderAuth';
 import SignIn from '../screens/auth/SignIn';
 import SignUp from '../screens/auth/SignUp';
 import Home from '../screens/main/Home';
 import Landing from '../screens/Landing';
 
 const DashboardStack = createStackNavigator();
-const AuthScreen = (gesture_conf) => {
+const AuthScreen = () => {
   const configOptions = {
     header: (props) => <HeaderAuth {...props} />,
     cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-    ...gesture_conf,
   };
   return (
     <DashboardStack.Navigator headerMode="screen">
@@ -51,41 +50,28 @@ const MainScreen = () => {
   );
 };
 
-const App = () => {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState();
-  const gestureConfig = {
-    gestureEnabled: true,
-    gestureDirection: 'vertical',
-    gestureResponseDistance: {
-      vertical: scale(200),
-    },
-  };
+const Router = () => {
+  const {user, setUser} = useContext(AuthContext);
+  const [initialize, setInitialize] = useState(true);
 
-  const _authCredentials = (_user) => {
-    // console.log('_user', _user);
-    AuthScreen(gestureConfig);
+  const _onAuthStateChanged = (_user) => {
     setUser(_user);
-    setLoading(false);
+    if (initialize) setInitialize(false);
   };
 
   useEffect(() => {
-    const subscribe = auth().onAuthStateChanged(_authCredentials);
-    return () => subscribe();
+    const subscribe = auth().onAuthStateChanged(_onAuthStateChanged);
+    return () => subscribe;
   }, []);
 
-  return loading ? (
-    <ActivityIndicator
-      style={indicator.container}
-      animating={true}
-      color={color.avocado}
-      size={40}
-    />
-  ) : (
+  if (initialize)
+    return <ActivityIndicator size="large" color={color.avocado} />;
+
+  return (
     <NavigationContainer>
-      {!user ? <AuthScreen /> : <MainScreen />}
+      {user ? <MainScreen /> : <AuthScreen />}
     </NavigationContainer>
   );
 };
 
-export default App;
+export default Router;

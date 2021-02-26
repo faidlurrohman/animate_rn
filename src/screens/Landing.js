@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {color} from '../css/Colors';
 import {scale, font, WIDTH} from '../css/Style';
-import OnboardSlide from '../helper/OnboardSlide';
+import OnboardSlide from '../components/OnboardSlide';
 
 const Landing = ({navigation}) => {
   const slides = [

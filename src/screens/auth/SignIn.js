@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -13,11 +13,12 @@ import {
 import {color} from '../../css/Colors';
 import {scale, font} from '../../css/Style';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {loginFB} from '../../config/firebase/Auth';
+import {AuthContext} from '../../config/firebase/AuthProvider';
 
 UIManager.setLayoutAnimationEnabledExperimental(true);
 
 const SignIn = ({route, navigation}) => {
+  const {loginGoogle, loginFacebook} = useContext(AuthContext);
   const [signInAction, setSignInAction] = useState(false);
   const {bgColor} = route.params;
 
@@ -157,7 +158,7 @@ const SignIn = ({route, navigation}) => {
           }}>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => loginFB()}
+            onPress={() => loginFacebook()}
             style={{
               padding: scale(10),
               width: scale(50),
@@ -176,6 +177,7 @@ const SignIn = ({route, navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
+            onPress={() => loginGoogle()}
             style={{
               padding: scale(10),
               width: scale(50),
@@ -225,7 +227,7 @@ const SignIn = ({route, navigation}) => {
           borderRadius: signInAction ? 100 : scale(5),
           width: signInAction ? scale(64) : '100%',
         }}
-        onPress={userSignIn}>
+        onPress={() => userSignIn().then(navigation.navigate('Landing'))}>
         <Text
           style={{
             fontSize: scale(16),
