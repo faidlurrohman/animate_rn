@@ -2,6 +2,7 @@ import React, {createContext, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import {WEB_CLIENT_ID} from '@env';
+import {LoginManager, AccessToken} from 'react-native-fbsdk';
 
 export const AuthContext = createContext();
 
@@ -35,7 +36,7 @@ export const AuthProvider = ({children}) => {
             const googleCredential = auth.GoogleAuthProvider.credential(
               idToken,
             );
-            return auth().signInWithCredential(googleCredential);
+            await auth().signInWithCredential(googleCredential);
           } catch (e) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
               // user cancelled the login flow
@@ -49,7 +50,35 @@ export const AuthProvider = ({children}) => {
             console.log('e', e);
           }
         },
-        loginFacebook: async () => {},
+        loginFacebook: async () => {
+          try {
+            const result = await LoginManager.logInWithPermissions([
+              'public_profile',
+              'email',
+            ]);
+
+            if (result.isCancelled) {
+              throw 'User cancelled the login process';
+            }
+
+            // Once signed in, get the users AccesToken
+            const data = await AccessToken.getCurrentAccessToken();
+
+            if (!data) {
+              throw 'Something went wrong obtaining access token';
+            }
+
+            // Create a Firebase credential with the AccessToken
+            const facebookCredential = auth.FacebookAuthProvider.credential(
+              data.accessToken,
+            );
+
+            // Sign-in the user with the credential
+            await auth().signInWithCredential(facebookCredential);
+          } catch (e) {
+            console.log('e', e);
+          }
+        },
         loginTwitter: async () => {},
         logout: async () => {
           try {
