@@ -57,7 +57,7 @@ const HeaderAuth = (props) => {
             letterSpacing: 1,
             color: color.white,
           }}>
-          {sceneRoute === 'SignIn' ? 'SIGN UP' : 'SIGN IN'}
+          {sceneRoute === 'SignIn' ? 'SIGN UP' : 'LOG IN'}
         </Text>
       </TouchableOpacity>
     </View>

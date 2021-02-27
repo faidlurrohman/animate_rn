@@ -10,11 +10,29 @@ GoogleSignin.configure({webClientId: WEB_CLIENT_ID});
 
 export const AuthProvider = ({children}) => {
   const [user, setUser] = useState(null);
+  const [confirmationPhone, setConfirmationPhone] = useState(null);
   return (
     <AuthContext.Provider
       value={{
         user,
         setUser,
+        confirmationPhone,
+        setConfirmationPhone,
+        loginPhone: async (_phone) => {
+          try {
+            const confirmation = await auth().signInWithPhoneNumber(_phone);
+            setConfirmationPhone(confirmation);
+          } catch (e) {
+            console.log('e', e);
+          }
+        },
+        codePhoneConfirm: async (_code) => {
+          try {
+            await confirmationPhone.confirm(_code);
+          } catch (e) {
+            console.log(e);
+          }
+        },
         loginDefault: async (email, pass) => {
           try {
             await auth().signInWithEmailAndPassword(email, pass);
@@ -83,6 +101,8 @@ export const AuthProvider = ({children}) => {
         logout: async () => {
           try {
             await auth().signOut();
+            setUser(null);
+            setConfirmationPhone(null);
           } catch (e) {
             console.log('e', e);
           }

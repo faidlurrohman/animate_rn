@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
   Keyboard,
+  Button,
 } from 'react-native';
 import {color} from '../../css/Colors';
 import {scale, font} from '../../css/Style';
@@ -18,8 +19,15 @@ import {AuthContext} from '../../config/firebase/AuthProvider';
 UIManager.setLayoutAnimationEnabledExperimental(true);
 
 const SignIn = ({route, navigation}) => {
-  const {loginGoogle, loginFacebook} = useContext(AuthContext);
+  const {
+    loginGoogle,
+    loginFacebook,
+    confirmationPhone,
+    loginPhone,
+    codePhoneConfirm,
+  } = useContext(AuthContext);
   const [signInAction, setSignInAction] = useState(false);
+  const [code, setCode] = useState('');
   const {bgColor} = route.params;
 
   const userSignIn = () => {
@@ -35,6 +43,24 @@ const SignIn = ({route, navigation}) => {
     }, 3000);
     Keyboard.dismiss();
   };
+
+  if (!confirmationPhone) {
+    return (
+      <Button
+        title="Phone Number Sign In"
+        onPress={() => loginPhone('+62 856-5526-9763')}
+      />
+    );
+  }
+
+  if (confirmationPhone) {
+    return (
+      <>
+        <TextInput value={code} onChangeText={(text) => setCode(text)} />
+        <Button title="Confirm Code" onPress={() => codePhoneConfirm(code)} />
+      </>
+    );
+  }
 
   return (
     <View

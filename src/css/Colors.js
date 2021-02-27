@@ -1,7 +1,8 @@
 const color = {
   avocado: '#258039',
   yellow: '#F5BE41',
-  aqua: '#31A9B8',
+  aqua: '#006bff',
+  // aqua: '#31A9B8',
   tomato: '#CF3721',
   grey: '#5D5D5D',
   transparent: 'rgba(0,0,0,0)',

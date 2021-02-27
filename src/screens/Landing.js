@@ -166,7 +166,7 @@ const Landing = ({navigation}) => {
                 bgColor: backgroundProps,
               })
             }>
-            <Text style={styles.textSignIn}>SIGN IN</Text>
+            <Text style={styles.textSignIn}>LOG IN</Text>
           </TouchableOpacity>
         </View>
       </Animated.View>
